@@ -1,0 +1,155 @@
+﻿@using Core.Model
+@using Common.Enum
+@using SystemWebUI.Migrations
+@model Core.Model.DonVi
+@{
+    ViewBag.Title = "Cấu hình email đơn vị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = (NguoiDung)SessionManager.ReturnSessionObject(ConstantValues.SessionKeyCurrentUser);
+}
+
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","DonVi")">Quản lý đơn vị</a></li>
+                <li>Cấu hình mail</li>
+            </ul>
+            <h4>Cấu hình mail cho <strong>@Model.Ten</strong></h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+
+<div class="col-md-12 wp-addserver">
+    <div class="col-md-12">
+        @using (Html.BeginForm("CauHinhMail", "DonVi", FormMethod.Post))
+        {
+            @*<p>You can change background color if you want.</p>*@
+            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                <div class="wp-form  clearfix">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">SMTP Server:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="smtpServer" name="smtpServer" value="@Model.CauHinhEmail.SMTPServer" placeholder="IP/HostName" class="form-control" title="IP/HostName">
+                            </div>
+                            <label for="input" class="col-sm-1 control-label">Port:</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="port" name="port"  value="@Model.CauHinhEmail.Port" placeholder="993" class="form-control" title="Port">
+                            </div>
+                            <div class="col-sm-2">
+                                <label><input type="checkbox" id="ssl" name="ssl" title="SSL" @(Model.CauHinhEmail.SSL == 1 ? "checked = checked": "")>&nbsp; SSL</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Tài khoản:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="taiKhoan" name="taiKhoan" value="@Model.CauHinhEmail.TaiKhoan" placeholder="Tên tài khoản" class="form-control" title="Tên hiển thị">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Mật khẩu:</label>
+                            <div class="col-sm-4">
+                                <input type="password" id="matKhau" name="matKhau" value="@Model.CauHinhEmail.MatKhau" class="form-control" title="Mật khẩu">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Tên hiển thị:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="tenHienThi" name="tenHienThi" value="@Model.CauHinhEmail.TenHienThi" placeholder="Tên hiển thị" class="form-control" title="IP/HostName">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Địa chỉ email gửi:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="emailGui" name="emailGui" value="@Model.CauHinhEmail.EmailGui" placeholder="abc@camau.gov.vn" class="form-control" title="Port">
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="pull-right">
+                                <input type="hidden" value="@Model.Id" name="donViId" />
+                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                <a class="btn btn-embossed  btn-danger btn-xoa" href="javascript:;" data-id="@Model.Id"  id="xoaDuLieu" data-toggle="modal" data-target="#btn-xoa"><i class="glyphicon glyphicon-remove"></i> Xóa email</a>
+                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","DonVi")"><i class="glyphicon glyphicon-arrow-left" ></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+<div class="modal fade" id="btn-xoa" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa toàn bộ thông tin cấu hình email không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-embossed delete" data-dismiss="modal">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="currentUserId" value="@currentUser.Id"/>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('button[name=save]').click(function (e) {
+                var dieuKien = true;
+               
+                if (!/^\w+([\.-]?\w+)*@('@')\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#emailGui').val())) {
+                    shownotify('alert-danger', "Email không hợp lệ");
+                    dieuKien = false;
+                }
+                if (!/\d$/.test($('#port').val())) {
+                    shownotify('alert-danger', "Port không hợp lệ");
+                    dieuKien = false;
+                }
+
+
+                if (!dieuKien)
+                    e.preventDefault();
+            });
+            var proxy = $.connection.donViHub;
+            $.connection.hub.start().done(function () {
+                $('.btn-xoa').on('click', function () {
+                    $("#btn-xoa").attr("data-id", $(this).attr("data-id"));
+                });
+                $("#btn-xoa").on('click', '.delete', function (e) {
+                    $(".loading").show();
+                    donViId = $('#btn-xoa').attr("data-id");
+                    userId = $("#currentUserId").val();
+                    var result = proxy.server.xoaCauHinhEmail(donViId, userId);
+                });
+
+            });
+            proxy.client.deletedResult = function (result) {
+                if (result) {
+                    //$(".div_" + id_xoa).remove();
+                    //$(".loading").hide();
+                    shownotify('alert-success', 'Xóa cấu hình email thành công');
+                    location.reload();
+                } else {
+                    $(".loading").hide();
+                    shownotify('alert-danger', 'Xóa cấu hình email thất bại.');
+                }
+            };
+        });
+    </script>
+}

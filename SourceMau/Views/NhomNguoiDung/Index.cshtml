@@ -1,0 +1,119 @@
+﻿@using Common.Enum
+@model SystemWebUI.Models.NhomNguoiDungModel
+
+@{
+    ViewBag.Title = "Danh sách nhóm người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int stt = ((Model.CurrentPage - 1) * PageNumber.NhomNguoiDung) + 1;
+}
+<style>
+    .chuc-nang-con {
+        padding-left: 30px !important;
+    }
+</style>
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","NhomNguoiDung")">Quản lý Nhóm người dùng</a></li>
+                <li>Danh sách Nhóm người dùng</li>
+            </ul>
+            <h4>Danh sách Nhóm người dùng</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+<div class="table-responsive" style="padding: 15px;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="font-weight: bold; background: #428bca; color: #fff">
+                <td>Số thứ tự</td>
+                <td>Tên nhóm</td>
+                <td>Thuộc đơn vị</td>
+                <td style="text-align: center">Tác vụ</td>
+            </tr>
+        </thead>
+        <tbody id="ds_noi_dung">
+            @foreach (var nhomNguoiDung in Model.DanhSachNhomNguoiDung)
+            {
+                <tr id="tr_@nhomNguoiDung.Id">
+                    <td>@(stt++)</td>
+                    <td>@nhomNguoiDung.Ten</td>
+                    <td>@nhomNguoiDung.TenDonVi</td>
+                    <td style="text-align: center">
+                        <a href="@Url.Action("ChinhSua", "NhomNguoiDung", new {id = nhomNguoiDung.Id})" class="btn btn-xs btn-success" title="Chỉnh sửa">
+                            <i class='fa fa-pencil' style="cursor: pointer; padding-right: 0px;" title="chỉnh sửa"></i>
+                        </a>
+                        <a href="javascript:;" class="btn btn-xs btn-danger btn-xoa" data-id="@nhomNguoiDung.Id" data-toggle="modal" data-target="#btn-xoa">
+                            <span class="fa fa-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.TotalPage > 1)
+    {
+        <div class="paging-wp" style="padding: 0 10px; width: 100%">
+            <ul id="pagination" class="pagination">
+                <li class="first @(Model.CurrentPage == 1 ? "disabled" : "")"><a href="@Url.Action("Index", "NhomNguoiDung", new {page = 1, total=Model.TotalPage})">Trang đầu</a></li>
+                <li class="prev @(Model.CurrentPage == 1 ? "disabled" : "")"><a href="@Url.Action("Index", "NhomNguoiDung", new {page = Model.CurrentPage - 1, total=Model.TotalPage})">&lt;</a></li>
+                @for (int i = 0; i < Model.TotalPage; i++)
+                {
+                    <li class="page @(Model.CurrentPage == i+1 ? "active" : "")"><a href="@Url.Action("Index", "NhomNguoiDung", new {page = i+1, total=Model.TotalPage})">@(i + 1)</a></li>
+                }
+                <li class="next @(Model.CurrentPage == Model.TotalPage ? "disabled" : "")"><a href="@Url.Action("Index", "NhomNguoiDung", new {page = Model.CurrentPage + 1, total=Model.TotalPage})">&gt;</a></li>
+                <li class="last" @(Model.CurrentPage == Model.TotalPage ? "disabled" : "")><a href="@Url.Action("Index", "NhomNguoiDung", new {page = Model.TotalPage, total=Model.TotalPage})">Trang cuối</a></li>
+            </ul>
+        </div>
+    }
+</div>
+<div class="modal fade" id="btn-xoa" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Lưu ý: Nhóm người dùng chưa được sử dụng mới có thể xóa. Bạn có chắc muốn xóa nhóm người dùng này không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-embossed delete" data-dismiss="modal">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var proxy = $.connection.nhomNguoiDungHub;
+        $.connection.hub.start().done(function () {
+            $('.btn-xoa').on('click', function () {
+                $("#btn-xoa").attr("data-id", $(this).attr("data-id"));
+            });
+            $("#btn-xoa").on('click', '.delete', function (e) {
+                $(".loading").show();
+                id_xoa = $('#btn-xoa').attr("data-id");
+                var result = proxy.server.xoaNhomNguoiDung(id_xoa);
+            });
+
+        });
+        proxy.client.deletedResult = function (result) {
+            if (result) {
+                //$(".div_" + id_xoa).remove();
+                //$(".loading").hide();
+                shownotify('alert-success', 'Xóa nhóm người dùng thành công');
+                location.reload();
+            } else {
+                $(".loading").hide();
+                shownotify('alert-danger', 'Xóa nhóm người dùng thất bại.');
+            }
+        };
+    });
+</script>

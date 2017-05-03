@@ -1,0 +1,144 @@
+﻿@model SystemWebUI.Models.NhomNguoiDungModel
+@{
+    ViewBag.Title = "Chỉnh sửa nhóm người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var donViCap1 = Model.DanhSachDonVi.FindAll(dv => dv.Cap == 1);
+}
+@helper HienThiOptionDonVi(string maDonVi)
+{
+var listChild = Model.DanhSachDonVi.FindAll(d => d.IdDonViTrucThuoc == maDonVi);
+if (listChild.Count > 0)
+{
+    foreach (var dv in listChild)
+    {
+        string cap = "";
+        for (int i = 1; i < dv.Cap; i++)
+        {
+            cap += "--";
+        }
+        <option value="@dv.Id" @(dv.Id.ToString() == Model.NhomNguoiDungHienTai.IdDonVi ? "selected = selected" : "")>@(cap + dv.Ten)</option>
+        @HienThiOptionDonVi(dv.Id.ToString())
+    }
+}
+else
+{
+    return;
+}
+}
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","NhomNguoiDung")">Quản lý nhóm người dùng</a></li>
+                <li>Chỉnh sửa nhóm người dùng</li>
+            </ul>
+            <h4>Chỉnh sửa nhóm người dùng</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+
+<div class="col-md-12 wp-addserver">
+    <div class="col-md-12">
+        @using (Html.BeginForm("ChinhSua", "NhomNguoiDung", FormMethod.Post))
+        {
+            @*<p>You can change background color if you want.</p>*@
+            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                <div class="wp-form  clearfix">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Tên nhóm người dùng:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="ten" name="ten" class="form-control form-white" value="@Model.NhomNguoiDungHienTai.Ten" required="required" placeholder="Tên nhóm người dùng" title="Tên nhóm người dùng">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Mô tả:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="moTa" name="moTa" class="form-control form-white" value="@Model.NhomNguoiDungHienTai.MoTa" required="required" placeholder="Mô tả" title="Mô tả">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Đơn vị trực thuộc:</label>
+                            <div class="col-sm-4">
+                                <select id="donVi" name="donVi" class="form-control" title="Vai trò">
+                                    @foreach (var dv in donViCap1)
+                                    {
+                                        <option value="@dv.Id"  @(dv.Id.ToString() == Model.NhomNguoiDungHienTai.IdDonVi ? "selected = selected" : "")>@dv.Ten</option>
+                                        @HienThiOptionDonVi(dv.Id.ToString())
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Phân quyền chức năng:</label>
+                            <div class="col-sm-10">
+                                @foreach (var cn in Model.DanhSachChucNang)
+                                {
+                                    <div class="col-sm-6">
+                                        <label><input type="checkbox" name="chucNang" value="@cn.ChucNangChinh.Id" class="chucNangCha" id="@("cb" +cn.ChucNangChinh.Id)"  @(Model.NhomNguoiDungHienTai.DanhSachChucNang.Contains(cn.ChucNangChinh.Id.ToString()) ? "checked=checked" : "")/> <strong>@cn.ChucNangChinh.Ten</strong> </label><br />
+                                        @foreach (var cnCon in cn.DanhSachChucNangCon)
+                                        {
+                                            <label>@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")<input type="checkbox" name="chucNang" value="@cnCon.Id" data-parentId="@cn.ChucNangChinh.Id" class="chucNangCon @("cb"+cn.ChucNangChinh.Id)" @(Model.NhomNguoiDungHienTai.DanhSachChucNang.Contains(cnCon.Id.ToString()) ? "checked=checked" : "") /> @cnCon.Ten </label><br />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="pull-right">
+                                <input type="hidden" name="nhomNguoiDungId" value="@Model.NhomNguoiDungHienTai.Id"/>
+                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","NhomNguoiDung")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $(".chucNangCha").on('click', function () {
+                var cnId = $(this).val();
+                if ($(this).prop("checked") == true) {
+                    $(".cb" + cnId).prop("checked", true);
+                } else {
+                    $(".cb" + cnId).prop("checked", false);
+                }
+
+            });
+            $(".chucNangCon").on('click', function () {
+                var cnId = $(this).attr("data-parentId");
+                //alert(cnId);
+                if ($(this).prop("checked") == true) {
+                    $("#cb" + cnId).prop("checked", true);
+                } else {
+                    var isHasChecked = false;
+                    $(".cb" + cnId).each(function () {
+                        if ($(this).prop("checked") == true) {
+                            isHasChecked = true;
+                            return;
+                        }
+                    });
+                    if(!isHasChecked){
+                        $("#cb" + cnId).prop("checked", false);
+                    }
+
+                }
+            });
+        });
+    </script>
+}

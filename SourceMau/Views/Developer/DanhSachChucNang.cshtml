@@ -1,0 +1,152 @@
+﻿@model List<SystemWebUI.Models.MenuQuyenHanModel>
+@{
+    ViewBag.Title = "Danh sách chức năng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .chuc-nang-con{
+        padding-left:30px !important;
+    }
+</style>
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","Developer")">Developer</a></li>
+                <li>Danh sách chức năng</li>
+            </ul>
+            <h4>Danh sách chức năng</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+<div class="col-sm-12">
+    <div class="form-group loc_dich_vu_theo_port">
+        <div class="col-sm-12 col-xs-12">
+            <a href="@Url.Action("ThemChucNang","Developer")" class="btn btn-xs btn-info pull-right"><strong>Thêm chức năng mới</strong></a>
+        </div>
+    </div>
+</div>
+<div class="table-responsive" style="padding: 15px;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="font-weight: bold; background: #428bca; color: #fff">
+                <td>Tên chức năng</td>
+                <td>Đường dẫn</td>
+                <td>Sắp xếp</td>
+                <td>Đang kích hoạt</td>
+                <td style="text-align: center">Tác vụ</td>
+            </tr>
+        </thead>
+        <tbody id="ds_noi_dung">
+            @foreach (var chucNang in Model)
+            {
+                <tr id="tr_@chucNang.ChucNangChinh.Id">
+                    <td>@chucNang.ChucNangChinh.Ten</td>
+                    <td>@chucNang.ChucNangChinh.LienKet</td>
+                    <td>@chucNang.ChucNangChinh.SapXep</td>
+                    <td><input type="checkbox" @(chucNang.ChucNangChinh.KichHoat == 1 ? "checked=checked" : "") class="kich-hoat-chuc-nang" id="@chucNang.ChucNangChinh.Id"/></td>
+                    <td style="text-align: center">
+                        <a href="@Url.Action("ChinhSuaChucNang", "Developer", new {id = chucNang.ChucNangChinh.Id})" class="btn btn-xs btn-success" title="Chỉnh sửa">
+                            <i class='fa fa-pencil' style="cursor: pointer; padding-right: 0px;" title="chỉnh sửa"></i>
+                        </a>
+                        <a href="javascript:;" class="btn btn-xs btn-danger btn-xoa" data-id="@chucNang.ChucNangChinh.Id" data-toggle="modal" data-target="#btn-xoa">
+                            <span class="fa fa-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+                if(chucNang.DanhSachChucNangCon.Count > 0)
+                {
+                    foreach (var chucNangCon in chucNang.DanhSachChucNangCon)
+                    {
+                        <tr id="tr_@chucNangCon.Id">
+                            <td class="chuc-nang-con" >@chucNangCon.Ten</td>
+                            <td>@chucNangCon.LienKet</td>
+                            <td>@chucNangCon.SapXep</td>
+                            <td><input type="checkbox" @(chucNangCon.KichHoat == 1 ? "checked=checked" : "") class="kich-hoat-chuc-nang" id="@chucNangCon.Id"/></td>
+                            <td style="text-align: center">
+                                <a href="@Url.Action("ChinhSuaChucNang", "Developer", new {id = chucNangCon.Id})" class="btn btn-xs btn-success" title="Chỉnh sửa">
+                                    <i class='fa fa-pencil' style="cursor: pointer; padding-right: 0px;" title="chỉnh sửa"></i>
+                                </a>
+                                <a href="javascript:;" class="btn btn-xs btn-danger btn-xoa" data-id="@chucNangCon.Id" data-toggle="modal" data-target="#btn-xoa" >
+                                    <span class="fa fa-remove"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="btn-xoa" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa chức năng này?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary btn-embossed delete" data-dismiss="modal">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var chucNangProxy = $.connection.chucNangHub;
+        $.connection.hub.start().done(function () {
+       // alert(11);
+            $('.kich-hoat-chuc-nang').on('change', function () {
+                var trangThai = 0;
+                if ($(this).is(':checked')) {
+                    trangThai = 1;
+                }
+                //alert($(this).attr("id"));
+                chucNangProxy.server.batTatChucNang($(this).attr("id"), trangThai);
+                
+            });
+            $('.btn-xoa').on('click', function () {
+                $("#btn-xoa").attr("data-id", $(this).attr("data-id"));
+            });
+            $("#btn-xoa").on('click', '.delete', function (e) {
+                //if (confirm("Xoá thông tin máy chủ ra khỏi hệ thống giám sát. \n\nNếu xoá, dữ liệu giám sát không thể phục hồi, bạn có muốn xoá không?")) {
+                //console.log($(this).attr("data"));
+                $(".loading").show();
+                //id_xoa = $(this).attr("data");
+                id_xoa = $('#btn-xoa').attr("data-id");
+                var result = chucNangProxy.server.xoaChucNang(id_xoa);
+            });
+            
+        });
+        chucNangProxy.client.updateResult = function (result) {
+            if (result) {
+                shownotify('alert-success', 'Cập nhật chức năng thành công');
+            } else {
+                shownotify('alert-danger', 'Cập nhật chức năng thất bại');
+            }
+        };
+        chucNangProxy.client.deletedResult = function (result) {
+            if (result) {
+                //$(".div_" + id_xoa).remove();
+                //$(".loading").hide();
+                shownotify('alert-success', 'Xóa chức năng thành công');
+                location.reload();
+            } else {
+                $(".loading").hide();
+                shownotify('alert-danger', 'Xóa chức năng thất bại');
+                
+            }
+        };
+    });
+</script>

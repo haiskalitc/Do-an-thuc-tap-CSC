@@ -1,0 +1,36 @@
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Service.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Service.pdb
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Common.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Core.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Bson.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Driver.Core.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Driver.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Newtonsoft.Json.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Common.pdb
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Core.pdb
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Bson.xml
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Driver.xml
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\MongoDB.Driver.Core.xml
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\bin\Debug\Newtonsoft.Json.xml
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\obj\Debug\Service.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Service\obj\Debug\Service.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\obj\Debug\Service.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\obj\Debug\Service.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Service.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Service.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Common.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Core.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Bson.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Driver.Core.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Driver.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Newtonsoft.Json.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Common.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Core.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Bson.xml
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Driver.xml
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\MongoDB.Driver.Core.xml
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Service\bin\Debug\Newtonsoft.Json.xml

@@ -1,0 +1,172 @@
+﻿@using Common.Enum
+@model SystemWebUI.Models.DonViModel
+@{
+    ViewBag.Title = "Chỉnh sửa thông tin đơn vị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var donViCap1 = Model.DanhSachDonVi.FindAll(dv => dv.Cap == 1 && dv.Id.ToString() != Model.DonViHienTai.Id.ToString());
+}
+@helper HienThiOptionDonVi(string maDonVi)
+{
+    var listChild = Model.DanhSachDonVi.FindAll(d => d.IdDonViTrucThuoc == maDonVi && d.Id.ToString() != Model.DonViHienTai.Id.ToString());
+    if (listChild.Count > 0)
+    {
+        foreach (var dv in listChild)
+        {
+            string cap = "";
+            for (int i = 1; i < dv.Cap; i++)
+            {
+                cap += "--";
+            }
+            <option value="@dv.Id" @(dv.Id.ToString()==Model.DonViHienTai.IdDonViTrucThuoc ? "selected = selected": "")>@(cap + dv.Ten)</option>
+            //Model.DanhSachDonVi.Remove(dv);
+            @HienThiOptionDonVi(dv.Id.ToString())
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","DonVi")">Quản lý đơn vị</a></li>
+                <li>Chỉnh sửa thông tin đơn vị</li>
+            </ul>
+            <h4>Chỉnh sửa thông tin đơn vị</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+
+<div class="col-md-12 wp-addserver">
+    <div class="col-md-12">
+        @using (Html.BeginForm("ChinhSua", "DonVi", FormMethod.Post, new
+        { enctype = "multipart/form-data" }))
+        {
+            @*<p>You can change background color if you want.</p>*@
+            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                <div class="wp-form  clearfix">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Tên đơn vị:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="ten" name="ten" class="form-control form-white" value="@Model.DonViHienTai.Ten" required="required" placeholder="Tên" title="Tên">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Địa chỉ:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="diaChi" name="diaChi" class="form-control form-white" value="@Model.DonViHienTai.DiaChi" required="required" placeholder="Địa chỉ" title="Địa chỉ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Điện thoại:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="dienThoai" name="dienThoai" class="form-control form-white" value="@Model.DonViHienTai.DienThoai" required="required" placeholder="Điện thoại" title="Điện thoại">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Email:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="email" name="email" class="form-control form-white" value="@Model.DonViHienTai.Email" required="required" placeholder="Email" title="Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Fax:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="fax" name="fax" value="@Model.DonViHienTai.Fax" class="form-control" required="required" placeholder="Số Fax" title="Số Fax">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Logo đơn vị:</label>
+                            <div class="col-sm-4">
+                                <input type="file" id="logoDonVi" name="logoDonVi" title="Logo đơn vị" size="23" />
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Họ tên Lãnh đạo:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="hoTenLanhDao" name="hoTenLanhDao" value="@Model.HoTenLanhDao" class="form-control" required="required" placeholder="Họ tên lãnh đạo" title="Họ tên lãnh đạo">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Điện thoại Lãnh đạo:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="dienThoaiLanhDao" name="dienThoaiLanhDao" value="@Model.DienThoaiLanhDao" class="form-control" required="required" placeholder="Điện thoại lãnh đạo" title="Điện thoại lãnh đạo">
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="form-group">
+                            @*<label for="input" class="col-sm-2 control-label">Email Lãnh đạo:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="emailLanhDao" name="emailLanhDao" value="@Model.EmailLanhDao" class="form-control" required="required" placeholder="Email lãnh đạo" title="Email lãnh đạo">
+                            </div>*@
+                            <label for="input" class="col-sm-2 control-label">Đơn vị trực thuộc:</label>
+                            <div class="col-sm-4">
+                                <select id="donViTrucThuoc" name="donViTrucThuoc" class="form-control" title="Vai trò">
+                                    @if ((bool)Session[ConstantValues.SessionKeyVaiTro])
+                                    {
+                                        <option value="0">---Không chọn---</option>
+                                    }
+                                    @foreach (var dv in donViCap1)
+                                    {
+                                        <option value="@dv.Id" @(dv.Id.ToString()==Model.DonViHienTai.IdDonViTrucThuoc ? "selected = selected": "")>@dv.Ten</option>
+                                        @HienThiOptionDonVi(dv.Id.ToString())
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="pull-right">
+                                <input type="hidden" value="@Model.DonViHienTai.Id" name="donViId" />
+                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","DonVi")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('button[name=save]').click(function (e) {
+                var dieuKien = true;
+                if (!/\d$/.test($('#dienThoai').val())) {
+                    shownotify('alert-danger', "Số điện thoại không hợp lệ");
+                    dieuKien = false;
+                }else{
+                    if($('#dienThoai').val().length <10 || $('#dienThoai').val().length > 15){
+                        shownotify('alert-danger', "Số điện thoại không hợp lệ");
+                        dieuKien = false;
+                    }
+
+                }
+                if (!/^\w+([\.-]?\w+)*@('@')\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#email').val())) {
+                    shownotify('alert-danger', "Email không hợp lệ");
+                    dieuKien = false;
+                }
+
+                if (!/\d{6}$/.test($('#fax').val())) {
+                    shownotify('alert-danger', "Số fax không hợp lệ");
+                    dieuKien = false;
+                }
+                
+
+                if (!dieuKien)
+                    e.preventDefault();
+            });
+        });
+    </script>
+}

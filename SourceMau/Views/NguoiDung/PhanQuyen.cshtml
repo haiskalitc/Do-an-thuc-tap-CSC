@@ -1,0 +1,97 @@
+﻿@model SystemWebUI.Models.NguoiDungModel
+@{
+    ViewBag.Title = "Phân quyền người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","NguoiDung")">Quản lý người dùng</a></li>
+                <li>Phân quyền người dùng</li>
+            </ul>
+            <h4>Phân quyền người dùng</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+
+<div class="col-md-12 wp-addserver">
+    <div class="col-md-12">
+        @using (Html.BeginForm("PhanQuyen", "NguoiDung", FormMethod.Post))
+        {
+            @*<p>You can change background color if you want.</p>*@
+            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                <div class="wp-form  clearfix">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Phân quyền chức năng:</label>
+                            <div class="col-sm-10">
+                                @foreach (var cn in Model.DanhSachChucNang)
+                                {
+                                    <div class="col-sm-6">
+                                        <label><input type="checkbox" name="chucNang" value="@cn.ChucNangChinh.Id" class="chucNangCha" id="@("cb" +cn.ChucNangChinh.Id)" @(Model.NguoiDungHienTai.DanhSachChucNang.Contains(cn.ChucNangChinh.Id.ToString()) ? "checked=checked" : "") /> <strong>@cn.ChucNangChinh.Ten </strong></label><br />
+                                        @foreach (var cnCon in cn.DanhSachChucNangCon)
+                                        {
+                                            <label>@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")<input type="checkbox" name="chucNang" value="@cnCon.Id" data-parentId="@cn.ChucNangChinh.Id" class="chucNangCon @("cb"+cn.ChucNangChinh.Id)" @(Model.NguoiDungHienTai.DanhSachChucNang.Contains(cnCon.Id.ToString()) ? "checked=checked" : "") /> @cnCon.Ten </label><br />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="pull-right">
+                                <input type="hidden" name="nguoiDungId" value="@Model.NguoiDungHienTai.Id" />
+                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","NguoiDung")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $(".chucNangCha").on('click', function () {
+                var cnId = $(this).val();
+                if ($(this).prop("checked") == true) {
+                    $(".cb" + cnId).prop("checked", true);
+                } else {
+                    $(".cb" + cnId).prop("checked", false);
+                }
+
+            });
+            $(".chucNangCon").on('click', function () {
+                var cnId = $(this).attr("data-parentId");
+                //alert(cnId);
+                if ($(this).prop("checked") == true) {
+                    $("#cb" + cnId).prop("checked", true);
+                } else {
+                    var isHasChecked = false;
+                    $(".cb" + cnId).each(function () {
+                        if ($(this).prop("checked") == true) {
+                            isHasChecked = true;
+                            return;
+                        }
+                    });
+                    if(!isHasChecked){
+                        $("#cb" + cnId).prop("checked", false);
+                    }
+
+                }
+            });
+        });
+    </script>
+}

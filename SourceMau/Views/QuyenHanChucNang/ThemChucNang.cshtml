@@ -1,0 +1,150 @@
+﻿@model List<Core.Model.ChucNang>
+@{
+    ViewBag.Title = "Thêm chức năng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","TestTemplate")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","MailServer")">Danh sách mail</a></li>
+                <li>Thêm Mail Server</li>
+            </ul>
+            <h4>Thêm Mail Server</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+
+<div class="col-md-12 wp-addserver">
+    <div class="col-md-12">
+        @using (Html.BeginForm("ThemChucNang", "QuyenHanChucNang", FormMethod.Post))
+        {
+            @*<p>You can change background color if you want.</p>*@
+            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                <div class="wp-form  clearfix">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Tên:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="ten" name="ten" class="form-control form-white" value="" required="required" placeholder="Tên" title="Tên">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Biểu tượng:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="bieu_tuong" name="bieu_tuong" class="form-control form-white" value="" required="required" placeholder="Biểu tượng" title="Biểu tượng">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="input" class="col-sm-2 control-label">Liên kết:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="lien_ket" name="lien_ket" class="form-control form-white" value="" required="required" placeholder="Liên kết" title="Liên kết">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Chức năng cha:</label>
+                            <div class="col-sm-4">
+                                <select id="chuc_nang_cha" name="chuc_nang_cha" class="form-control" title="Chức năng cha">
+                                    <option value="0">Gốc</option>
+                                    @foreach (var chucNang in Model)
+                                    {
+                                        <option value="@chucNang.Id.ToString()">@chucNang.Ten</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            
+                            <label for="input" class="col-sm-2 control-label">Sắp xếp:</label>
+                            <div class="col-sm-4">
+                                <input type="text" id="sap_xep" name="sap_xep" value="1" class="form-control" title="Sắp xếp">
+                            </div>
+                            <label for="input" class="col-sm-2 control-label">Kích hoạt:</label>
+                            <div class="col-sm-4">
+                                <input type="checkbox" id="kich_hoat" name="kich_hoat" title="Kích hoạt">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <div class="pull-right">
+                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function() {
+
+            //xu ly hien thi tat mo thong tin so lan tin nhan
+          
+
+            var obj = $('.nav-stacked > li:nth-child(7)');
+            obj.addClass('active');
+            obj.find('.children li:nth-child(2)').addClass('active');
+
+            $("#chon_loai_dich_vu_theo_port").change(function() {
+                gia_tri = $("#chon_loai_dich_vu_theo_port").val();
+
+                port_mac_dinh = $(".data_port_loai_" + gia_tri).attr("data");
+                $("#port").val(port_mac_dinh);
+            });
+
+            $('button[name=save]').click(function(e) {
+                var dieuKien = true;
+                if ($('#ten_giam_sat').val().length < 3) {
+                    shownotify('alert-danger', "Tên dịch vụ từ 3 ký tự trở lên");
+                    dieuKien = false;
+                }
+                if (!/\w{3}/.test($('#ten_rut_gon').val())) {
+                    shownotify('alert-danger', "Tên giám sát từ 3 ký tự trở lên");
+                    dieuKien = false;
+                }
+                if (!/^(?:[a-zA-Z0-9]+|[a-zA-Z0-9][-a-zA-Z0-9]+[a-zA-Z0-9])(?:\.[a-zA-Z0-9]+|[a-zA-Z0-9][-a-zA-Z0-9]+[a-zA-Z0-9])+?$/.test($('#dia_chi_ip').val())) {
+                    shownotify('alert-danger', "IP/HostName không hợp lệ");
+                    dieuKien = false;
+                }
+                if (!/\d*$/.test($('#pop_imap_port').val())) {
+                    shownotify('alert-danger', "Port không hợp lệ");
+                    dieuKien = false;
+                }
+                if (!/\d*$/.test($('#smtp_port').val())) {
+                    shownotify('alert-danger', "Port không hợp lệ");
+                    dieuKien = false;
+                }
+                if ($('#pop_imap_server').val().length == 0) {
+                    shownotify('alert-danger', "Phải nhập host");
+                    dieuKien = false;
+                }
+                if ($('#smtp_server').val().length == 0) {
+                    shownotify('alert-danger', "Phải nhập host smtp");
+                    dieuKien = false;
+                }
+                if ($('#mail_username').val().length == 0) {
+                    shownotify('alert-danger', "Phải nhập địa chỉ email");
+                    dieuKien = false;
+                }
+                if ($('#mail_password').val().length == 0) {
+                    shownotify('alert-danger', "Phải nhập mật khẩu email");
+                    dieuKien = false;
+                }
+                if (!dieuKien)
+                    e.preventDefault();
+            });
+        });
+    </script>
+}

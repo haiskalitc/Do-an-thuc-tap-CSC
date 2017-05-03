@@ -1,0 +1,180 @@
+﻿@using Core.Model
+@using Common.Enum
+@using SystemWebUI.Migrations
+@model SystemWebUI.Models.NguoiDungModel
+@{
+    ViewBag.Title = "Cập nhật thông tin cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentUser = (NguoiDung)SessionManager.ReturnSessionObject(ConstantValues.SessionKeyCurrentUser);
+    
+}
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li>Cập nhật thông tin cá nhân</li>
+            </ul>
+            <h4>Cập nhật thông tin cá nhân</h4>
+        </div>
+    </div><!-- media -->
+</div><!-- pageheader -->
+<div class="contentpanel">
+    <div class="row row-stat">
+        <div class="col-md-12 portlets">
+            <ul class="nav nav-tabs" id="control-tab-server">
+                <li class="active"><a href="#capNhatThongTin" data-toggle="tab" aria-expanded="true">Cập nhật thông tin</a></li>
+                <li class=""><a href="#capNhatMatKhau" data-toggle="tab" aria-expanded="false">Thay đổi mật khẩu</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="capNhatThongTin">
+                    <div class="col-md-12">
+                        @using (Html.BeginForm("ChinhSua", "NguoiDung", FormMethod.Post))
+                        {
+                            @*<p>You can change background color if you want.</p>*@
+                            <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1  add-server-right">
+                                <div class="wp-form  clearfix">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="input" class="col-sm-2 control-label">Họ và Tên:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="ten" name="ten" class="form-control form-white" value="@Model.NguoiDungHienTai.Ten" required="required" placeholder="Họ và Tên" title="Họ và Tên">
+                                            </div>
+                                            <label for="input" class="col-sm-2 control-label">Tên đăng nhập:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="tenDangNhap" name="tenDangNhap" autocomplete="off" class="form-control form-white" readonly value="@Model.NguoiDungHienTai.TenDangNhap" required="required" placeholder="Tên đăng nhập" title="Tên đăng nhập">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="input" class="col-sm-2 control-label">Email:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="email" name="email" class="form-control form-white" value="@Model.NguoiDungHienTai.Email" required="required" placeholder="Email" title="Email">
+                                            </div>
+                                            <label for="input" class="col-sm-2 control-label">Điện thoại:</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" id="dienThoai" name="dienThoai" class="form-control form-white" value="@Model.NguoiDungHienTai.DienThoai" required="required" placeholder="Điện thoại" title="Điện thoại">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-10 col-sm-offset-2">
+                                            <div class="pull-right">
+                                                <input type="hidden" value="@Model.NguoiDungHienTai.Id" name="nguoiDungId" id="nguoiDungId" />
+                                                <button type="submit" value="save" name="save" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                                <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","NguoiDung")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="capNhatMatKhau">
+                    <div class="col-md-12">
+                        <div class="col-lg-10 col-sm-10 col-lg-offset-1 col-sm-offset-1">
+                            <div class="wp-form  clearfix">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="input" class="col-sm-2 control-label">Mật khẩu cũ:</label>
+                                        <div class="col-sm-4">
+                                            <input type="password" id="matKhauCu" name="matKhauCu" autocorrect="off" autocapitalize="off" autocomplete="off" class="form-control form-white" value="" required="required" placeholder="Mật khẩu cũ" title="Mật khẩu cũ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="input" class="col-sm-2 control-label">Mật khẩu:</label>
+                                        <div class="col-sm-4">
+                                            <input type="password" id="matKhau" name="matKhau" autocorrect="off" autocapitalize="off" autocomplete="off" class="form-control form-white" value="" required="required" placeholder="Mật khẩu" title="Mật khẩu">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="input" class="col-sm-2 control-label">Nhập lại mật khẩu:</label>
+                                        <div class="col-sm-4">
+                                            <input type="password" id="nhapLaiMatKhau" name="nhapLaiMatKhau" class="form-control form-white" value="" required="required" placeholder="Nhập lại mật khẩu" title="Nhập lại mật khẩu">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <div class="pull-right">
+                                            <button type="submit" value="changePassword" id="changePassword" name="changePassword" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-floppy-disk"></i> Lưu lại</button>
+                                            <a class="cancel btn btn-embossed btn-default" href="@Url.Action("Index","NguoiDung")"><i class="glyphicon glyphicon-remove"></i> Trở về</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="currentUserId" value="@currentUser.Id" />
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('button[name=save]').click(function (e) {
+                var dieuKien = true;
+                if (!/\d$/.test($('#dienThoai').val())) {
+                    shownotify('alert-danger', "Số điện thoại không hợp lệ!");
+                    dieuKien = false;
+                }else{
+                    if($('#dienThoai').val().length <10 || $('#dienThoai').val().length > 15){
+                        shownotify('alert-danger', "Số điện thoại không hợp lệ!");
+                        dieuKien = false;
+                    }
+                }
+                if (!/^\w+([\.-]?\w+)*@('@')\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#email').val())) {
+                    shownotify('alert-danger', "Email không hợp lệ");
+                    dieuKien = false;
+                }
+                if (!dieuKien)
+                    e.preventDefault();
+            });
+            var proxy = $.connection.nguoiDungHub;
+            $.connection.hub.start().done(function () {
+                $("#changePassword").on("click",function(){
+                    var dieuKien = true;
+                    if($('#matKhauCu').val().length < 6){
+                        shownotify('alert-danger', "Mật khẩu cũ không đúng!");
+                        dieuKien = false;
+                    }else if($('#matKhau').val().length < 6){
+                        shownotify('alert-danger', "Mật khẩu phải dài hơn 6 ký tự!");
+                        dieuKien = false;
+                    }else if($('#matKhau').val() != $('#nhapLaiMatKhau').val()){
+                        shownotify('alert-danger', "Nhập lại mật khẩu không khớp!");
+                        dieuKien = false;
+                    }
+                    if(dieuKien){
+                        var id = $("#nguoiDungId").val();
+                        userId = $("#currentUserId").val();
+                        proxy.server.capNhatMatKhau(id,userId, $('#matKhau').val(), $('#matKhauCu').val());
+                    }
+                });
+            });
+            proxy.client.wrongPassword = function () {
+                shownotify('alert-danger', 'Mật khẩu cũ không đúng!');
+            };
+            proxy.client.updateResult = function (result) {
+                if (result) {
+                    shownotify('alert-success', 'Thay đổi mật khẩu thành công');
+                } else {
+                    shownotify('alert-danger', 'Thay đổi mật khẩu thất bại');
+                }
+            };
+        });
+    </script>
+}

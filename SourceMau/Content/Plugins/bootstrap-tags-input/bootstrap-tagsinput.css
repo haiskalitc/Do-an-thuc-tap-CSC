@@ -1,0 +1,44 @@
+.bootstrap-tagsinput {
+    background-color: #ECEDEE;
+    border: 1px solid #ECEDEE;
+    border-radius: 4px;
+    color: #555;
+    cursor: text;
+    display: inline-block;
+    line-height: 22px;
+    margin-bottom: 10px;
+    padding: 4px 6px;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.bootstrap-tagsinput input {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    max-width: inherit;
+    outline: none;
+    padding: 0;
+    width: auto !important;
+}
+
+.bootstrap-tagsinput input:focus {
+    border: none;
+    box-shadow: none;
+}
+
+.bootstrap-tagsinput .tag {
+    color: white;
+    margin-right: 2px;
+}
+
+.bootstrap-tagsinput .tag [data-role="remove"] {
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.bootstrap-tagsinput .tag [data-role="remove"]:after {
+    content: "x";
+    padding: 0px 2px;
+}

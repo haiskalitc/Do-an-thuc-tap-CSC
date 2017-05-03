@@ -1,0 +1,30 @@
+﻿@model List<SystemWebUI.Models.MenuQuyenHanModel>
+
+@foreach (var menuItem in Model)
+{
+    <li class="function-menu parent" id="@menuItem.ChucNangChinh.Id.ToString()" >
+        <a href="@menuItem.ChucNangChinh.LienKet"><i class="fa @(menuItem.ChucNangChinh.BieuTuong.Equals("")? "fa-server" : menuItem.ChucNangChinh.BieuTuong) "></i><span>@menuItem.ChucNangChinh.Ten</span></a>
+        @if (menuItem.DanhSachChucNangCon.Count > 0)
+        {
+            <ul class="children">
+                @foreach (var menuItemChild in menuItem.DanhSachChucNangCon)
+                {
+                    <li class="function-menu" id="@menuItemChild.Id.ToString()"><a href="@menuItemChild.LienKet">@menuItemChild.Ten</a></li>
+                }
+            </ul>
+        }
+        
+    </li>
+}
+<script>
+    $(document).ready(function () {
+        $("li.function-menu").each(function (index) {
+            var href = $(this).find("a").attr("href");
+            if (href == window.location.pathname) {
+                $(this).addClass("active");
+                $(this).parents('li.function-menu').addClass("active");
+            }
+        });
+      //  alert(window.location.pathname);
+    });
+</script>

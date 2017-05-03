@@ -1,0 +1,184 @@
+﻿@using Core.Model
+@using Common.Enum
+@using SystemWebUI.Migrations
+@model SystemWebUI.Models.NguoiDungModel
+
+@{
+    ViewBag.Title = "Danh sách người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int stt = ((Model.CurrentPage - 1) * PageNumber.NguoiDung) + 1;
+    var currentUser = (NguoiDung)SessionManager.ReturnSessionObject(ConstantValues.SessionKeyCurrentUser);
+    var donViCap1 = new List<DonVi>();
+    if ((bool)Session[ConstantValues.SessionKeyVaiTro])
+    {
+        donViCap1 = Model.DanhSachDonVi.FindAll(dv => dv.Cap == 1);
+    }
+    else
+    {
+        donViCap1.Add(Model.DanhSachDonVi.First());
+    }
+}
+@helper HienThiOptionDonVi(string maDonVi)
+{
+var listChild = Model.DanhSachDonVi.FindAll(d => d.IdDonViTrucThuoc == maDonVi);
+if (listChild.Count > 0)
+{
+    foreach (var dv in listChild)
+    {
+        string cap = "";
+        for (int i = 1; i < dv.Cap; i++)
+        {
+            cap += "--";
+        }
+        <option value="@dv.Id" @(dv.Id.ToString().Equals(Model.DieuKienLoc) ? "selected=selected" : "")>@(cap + dv.Ten)</option>
+        @HienThiOptionDonVi(dv.Id.ToString())
+    }
+}
+else
+{
+    return;
+}
+}
+<style>
+    .chuc-nang-con {
+        padding-left: 30px !important;
+    }
+</style>
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-home"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li><a href="@Url.Action("Index","NguoiDung")">Quản lý Người dùng</a></li>
+                <li>Danh sách Người dùng</li>
+            </ul>
+            <h4>Danh sách Người dùng</h4>
+        </div>
+    </div><!-- media -->
+    
+</div><!-- pageheader -->
+<div class=""  style="padding: 15px;">
+    <div class="" >
+        @using (Html.BeginForm("TimKiem", "NguoiDung", FormMethod.Post))
+        {
+            <div class="col-sm-7">
+                <label for="dieukienloc" class="col-sm-2 control-label">Lọc theo đơn vị:</label>
+                <div class="col-sm-10">
+                    <select id="dieukienloc" name="dieukienloc" class="form-control" onchange="this.form.submit()">
+                        <option value="0">Chọn đơn vị</option>
+                        @foreach (var dv in donViCap1)
+                        {
+                            <option value="@dv.Id" @(dv.Id.ToString().Equals(Model.DieuKienLoc) ? "selected=selected" : "")>@dv.Ten</option>
+                            @HienThiOptionDonVi(dv.Id.ToString())
+                        }
+                        @*@foreach (var donVi in Model.DanhSachDonVi)
+                        {
+                            <option value="@donVi.Id" @(Model.DieuKienLoc == donVi.Id.ToString() ? "selected=selected" : "")>@donVi.Ten</option>
+                        }*@
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-5 pull-right">
+                <div class="col-sm-10">
+                    <input type="search" name="tuKhoa" class="form-control" value="@Model.TuKhoa" placeholder="Tìm kiếm người dùng" />
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" value="search" name="search" class="btn btn-embossed btn-save btn-success"><i class="glyphicon glyphicon-search"></i> Tìm</button>
+                </div>
+            </div>
+            
+        }
+    </div>
+</div>
+
+<div class="table-responsive" style="padding: 15px;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="font-weight: bold; background: #428bca; color: #fff">
+                <td>Số thứ tự</td>
+                <td>Vai trò</td>
+                <td>Tên người dùng</td>
+                <td>Tên tài khoản</td>
+                <td>Email</td>
+                <td>Điện thoại</td>
+                <td>Thuộc đơn vị</td>
+                <td>Kích hoạt</td>
+                <td style="text-align: center">Phân quyền</td>
+                <td style="text-align: center">Tác vụ</td>
+            </tr>
+        </thead>
+        <tbody id="ds_noi_dung">
+            @foreach (var nguoiDung in Model.DanhSachNguoiDung)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td><img src="~/Images/@nguoiDung.VaiTro.Icon" alt="@nguoiDung.VaiTro.Ten" width="24" title="@nguoiDung.VaiTro.Ten"/></td>
+                    <td>@nguoiDung.Ten</td>
+                    <td>@nguoiDung.TenDangNhap</td>
+                    <td>@nguoiDung.Email</td>
+                    <td>@nguoiDung.DienThoai</td>
+                    <td>@nguoiDung.DonVi.Ten</td>
+                    <td><input type="checkbox" @(nguoiDung.KichHoat == 1 ? "checked=checked" : "") class="kichHoatTaiKhoan" id="@nguoiDung.Id" /></td>
+                    <td style="text-align: center">
+                        <a href="@Url.Action("PhanQuyen", "NguoiDung", new {id = nguoiDung.Id})" class="@*btn btn-xs btn-warning*@" title="Phân quyền">
+                            Phân quyền
+                            @*<i class='fa fa-unlock-alt' style="cursor: pointer; padding-right: 0px;" title="Phân quyền"></i>*@
+                        </a>
+                    </td>
+                    <td style="text-align: center">
+                        
+                        <a href="@Url.Action("ChinhSua", "NguoiDung", new {id = nguoiDung.Id})" class="btn btn-xs btn-success" title="Chỉnh sửa">
+                            <i class='fa fa-pencil' style="cursor: pointer; padding-right: 0px;" title="chỉnh sửa"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.TotalPage > 1)
+    {
+        <div class="paging-wp" style="padding: 0 10px; width: 100%">
+            <ul id="pagination" class="pagination">
+                <li class="first @(Model.CurrentPage == 1 ? "disabled" : "")"><a href="@Url.Action("Index", "NguoiDung", new {page = 1, total=Model.TotalPage, tuKhoa=Model.TuKhoa, dieuKienLoc = Model.DieuKienLoc})">Trang đầu</a></li>
+                <li class="prev @(Model.CurrentPage == 1 ? "disabled" : "")"><a href="@Url.Action("Index", "NguoiDung", new {page = Model.CurrentPage - 1, total=Model.TotalPage, tuKhoa=Model.TuKhoa, dieuKienLoc = Model.DieuKienLoc})">&lt;</a></li>
+                @for (int i = 0; i < Model.TotalPage; i++)
+                {
+                    <li class="page @(Model.CurrentPage == i+1 ? "active" : "")"><a href="@Url.Action("Index", "NguoiDung", new {page = i+1, total=Model.TotalPage, tuKhoa=Model.TuKhoa, dieuKienLoc = Model.DieuKienLoc})">@(i + 1)</a></li>
+                }
+                <li class="next @(Model.CurrentPage == Model.TotalPage ? "disabled" : "")"><a href="@Url.Action("Index", "NguoiDung", new {page = Model.CurrentPage + 1, total=Model.TotalPage, tuKhoa=Model.TuKhoa, dieuKienLoc = Model.DieuKienLoc})">&gt;</a></li>
+                <li class="last" @(Model.CurrentPage == Model.TotalPage ? "disabled" : "")><a href="@Url.Action("Index", "NguoiDung", new {page = Model.TotalPage, total=Model.TotalPage, tuKhoa=Model.TuKhoa, dieuKienLoc = Model.DieuKienLoc})">Trang cuối</a></li>
+            </ul>
+        </div>
+    }
+</div>
+<input type="hidden" id="currentUserId" value="@currentUser.Id" />
+
+<script>
+    $(document).ready(function () {
+        var proxy = $.connection.nguoiDungHub;
+        $.connection.hub.start().done(function () {
+            $('.kichHoatTaiKhoan').on('change', function () {
+                var trangThai = 0;
+                if ($(this).is(':checked')) {
+                    trangThai = 1;
+                }
+                //alert($(this).attr("id"));
+                userId = $("#currentUserId").val();
+                proxy.server.kichHoatTaiKhoan($(this).attr("id"), userId, trangThai);
+
+            });
+
+        });
+        proxy.client.updateResult = function (result) {
+            if (result) {
+                shownotify('alert-success', 'Kích hoạt tài khoản thành công');
+            } else {
+                shownotify('alert-danger', 'Kích hoạt tài khoản thất bại');
+            }
+        };
+    });
+
+</script>

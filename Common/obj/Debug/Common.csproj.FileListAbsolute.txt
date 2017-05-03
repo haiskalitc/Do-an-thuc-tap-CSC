@@ -1,0 +1,12 @@
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\bin\Debug\Common.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\bin\Debug\Common.pdb
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\bin\Debug\Newtonsoft.Json.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\bin\Debug\Newtonsoft.Json.xml
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\obj\Debug\Common.dll
+C:\Data\CSC\2017\SourceHeThongMau\SourceMau\Common\obj\Debug\Common.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\bin\Debug\Common.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\bin\Debug\Common.pdb
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\bin\Debug\Newtonsoft.Json.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\bin\Debug\Newtonsoft.Json.xml
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\obj\Debug\Common.dll
+C:\Users\CSCOM-PC\Desktop\Hai Nguyen\SourceMau\SourceMau\Common\obj\Debug\Common.pdb
